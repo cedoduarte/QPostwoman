@@ -1,0 +1,5 @@
+# Ignore all .user files
+*.user
+
+# Ignore the build directory
+build/
