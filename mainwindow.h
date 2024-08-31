@@ -2,9 +2,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QJsonDocument>
-
-class QHttpClient;
 
 namespace Ui
 {
@@ -17,17 +14,19 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = nullptr);
     virtual ~MainWindow();
+protected:
+    void closeEvent(QCloseEvent *event) override;
 private slots:
-    void onFinished(const QJsonDocument &response);
-    void on_btnSend_clicked();
-
+    void on_actionClose_triggered();
+    void on_actionNew_workspace_triggered();
 private:
     void init();
-    bool setUrl();
-    void setBody();
+    void loadSettings();
+    void saveSettings();
+    void loadWorkspaces();
+    void saveWorkspaces();
 
     Ui::MainWindow *ui;
-    QHttpClient *m_http;
 };
 
 #endif // MAINWINDOW_H

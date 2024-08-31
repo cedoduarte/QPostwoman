@@ -25,8 +25,9 @@ public:
     void post();
     void put();
     void deleteResource();
+    void patch();
 signals:
-    void finished(const QJsonDocument &response);
+    void finished(const QByteArray &response);
 private slots:
     void onFinished(QNetworkReply *reply);
 private:
@@ -35,6 +36,7 @@ private:
 
     QString m_url;
     QJsonDocument m_body;
+    QString m_httpMethod;
     QNetworkAccessManager *m_manager;
     std::vector<QHttpHeader> m_headers;
 };

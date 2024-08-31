@@ -6,7 +6,8 @@ enum HttpMethod
     Get,
     Post,
     Put,
-    Delete
+    Delete,
+    Patch
 };
 
 #endif // ENUMS_H

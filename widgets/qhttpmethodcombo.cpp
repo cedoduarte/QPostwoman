@@ -17,5 +17,5 @@ HttpMethod QHttpMethodCombo::currentMethod() const
 
 void QHttpMethodCombo::init()
 {
-    addItems({"GET","POST","PUT","DELETE"});
+    addItems({"GET","POST","PUT","DELETE", "PATCH"});
 }

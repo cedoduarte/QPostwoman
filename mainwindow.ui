@@ -6,99 +6,36 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>873</width>
+    <height>678</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>QPostWoman</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="res.qrc">
+    <normaloff>:/img/qpostwoman.png</normaloff>:/img/qpostwoman.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout_4">
+   <layout class="QGridLayout" name="gridLayout">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <property name="spacing">
+     <number>0</number>
+    </property>
     <item row="0" column="0">
-     <widget class="QHttpMethodCombo" name="httpMethodCombo"/>
-    </item>
-    <item row="0" column="1">
-     <widget class="QLineEdit" name="txtUrl"/>
-    </item>
-    <item row="0" column="2">
-     <widget class="QPushButton" name="btnSend">
-      <property name="text">
-       <string>Send</string>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="0" colspan="3">
-     <widget class="QSplitter" name="splitter_2">
-      <property name="orientation">
-       <enum>Qt::Orientation::Vertical</enum>
-      </property>
-      <widget class="QSplitter" name="splitter">
-       <property name="orientation">
-        <enum>Qt::Orientation::Horizontal</enum>
-       </property>
-       <widget class="QFrame" name="frame_2">
-        <property name="frameShape">
-         <enum>QFrame::Shape::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Shadow::Raised</enum>
-        </property>
-        <layout class="QGridLayout" name="gridLayout_2">
-         <item row="2" column="0">
-          <widget class="QPlainTextEdit" name="txtBody"/>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label">
-           <property name="text">
-            <string>Body</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QFrame" name="frame_3">
-        <property name="frameShape">
-         <enum>QFrame::Shape::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Shadow::Raised</enum>
-        </property>
-        <layout class="QGridLayout" name="gridLayout_3">
-         <item row="0" column="0">
-          <widget class="QLabel" name="label_2">
-           <property name="text">
-            <string>Headers</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QHttpHeaderTable" name="tableHeaders"/>
-         </item>
-        </layout>
-       </widget>
-      </widget>
-      <widget class="QFrame" name="frame">
-       <property name="frameShape">
-        <enum>QFrame::Shape::NoFrame</enum>
-       </property>
-       <property name="frameShadow">
-        <enum>QFrame::Shadow::Raised</enum>
-       </property>
-       <layout class="QGridLayout" name="gridLayout">
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_3">
-          <property name="text">
-           <string>Response</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QPlainTextEdit" name="txtResponse"/>
-        </item>
-       </layout>
-      </widget>
-     </widget>
+     <widget class="QWorkspaceTabWidget" name="tabWidget"/>
     </item>
    </layout>
   </widget>
@@ -107,25 +44,68 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>873</width>
      <height>26</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionClose"/>
+   </widget>
+   <widget class="QMenu" name="menuWorkspace">
+    <property name="title">
+     <string>Workspace</string>
+    </property>
+    <addaction name="actionNew_workspace"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuWorkspace"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionNew_workspace"/>
+   <addaction name="actionClose"/>
+  </widget>
+  <action name="actionClose">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/img/delete.png</normaloff>:/img/delete.png</iconset>
+   </property>
+   <property name="text">
+    <string>Close</string>
+   </property>
+  </action>
+  <action name="actionNew_workspace">
+   <property name="icon">
+    <iconset resource="res.qrc">
+     <normaloff>:/img/workspace.png</normaloff>:/img/workspace.png</iconset>
+   </property>
+   <property name="text">
+    <string>New workspace</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QHttpMethodCombo</class>
-   <extends>QComboBox</extends>
-   <header location="global">widgets/qhttpmethodcombo.h</header>
-  </customwidget>
-  <customwidget>
-   <class>QHttpHeaderTable</class>
-   <extends>QTableWidget</extends>
-   <header location="global">widgets/qhttpheadertable.h</header>
+   <class>QWorkspaceTabWidget</class>
+   <extends>QTabWidget</extends>
+   <header location="global">widgets/qworkspacetabwidget.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="res.qrc"/>
+ </resources>
  <connections/>
 </ui>

@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/">
+        <file>img/send.png</file>
+        <file>img/qpostwoman.png</file>
+        <file>img/add.png</file>
+        <file>img/delete.png</file>
+        <file>img/clear.png</file>
+        <file>img/copy.png</file>
+        <file>img/paste.png</file>
+        <file>img/workspace.png</file>
+    </qresource>
+</RCC>

@@ -1,7 +1,9 @@
 #include "qhttpclient.h"
 
+#include <QDebug>
 #include <QNetworkRequest>
 #include <QNetworkReply>
+#include <QSslConfiguration>
 
 QHttpClient::QHttpClient(QObject *parent)
     : QObject(parent)
@@ -41,6 +43,10 @@ std::vector<QHttpHeader> QHttpClient::headers() const
 
 void QHttpClient::addHeader(const QHttpHeader &header)
 {
+    if (header.key().isEmpty() || header.value().isEmpty())
+    {
+        return;
+    }
     m_headers.push_back(header);
 }
 
@@ -70,32 +76,46 @@ void QHttpClient::removeHeader(const QString &key)
 
 void QHttpClient::get()
 {
+    m_httpMethod = "GET";
     m_manager->get(makeRequest());
 }
 
 void QHttpClient::post()
 {
+    m_httpMethod = "POST";
     m_manager->post(makeRequest(), m_body.toJson(QJsonDocument::Compact));
 }
 
 void QHttpClient::put()
 {
+    m_httpMethod = "PUT";
     m_manager->put(makeRequest(), m_body.toJson(QJsonDocument::Compact));
 }
 
 void QHttpClient::deleteResource()
 {
+    m_httpMethod = "DELETE";
     m_manager->deleteResource(makeRequest());
+}
+
+void QHttpClient::patch()
+{
+    m_httpMethod = "PATCH";
+    m_manager->sendCustomRequest(makeRequest(), "PATCH", m_body.toJson(QJsonDocument::Compact));
 }
 
 void QHttpClient::onFinished(QNetworkReply *reply)
 {
+    QByteArray response;
     if (reply->error() != QNetworkReply::NoError)
     {
-        reply->deleteLater();
-        return;
+        response = QString(reply->errorString()).toLatin1();
     }
-    emit finished(QJsonDocument::fromJson(reply->readAll()));
+    else
+    {
+        response = reply->readAll();
+    }
+    emit finished(response);
     reply->deleteLater();
 }
 
@@ -111,6 +131,9 @@ QNetworkRequest QHttpClient::makeRequest() const
 {
     QNetworkRequest request;
     request.setUrl(QUrl(m_url));
+    QSslConfiguration sslConfig = request.sslConfiguration();
+    sslConfig.setPeerVerifyMode(QSslSocket::VerifyNone);
+    request.setSslConfiguration(sslConfig);
     setHeaders(&request);
     return request;
 }

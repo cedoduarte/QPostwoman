@@ -1,8 +1,8 @@
 #include "mainwindow.h"
 #include "./ui_mainwindow.h"
-#include "services/qhttpclient.h"
+#include "persistence/qsqlitedatabase.h"
 
-#include <QDebug>
+#include <QSettings>
 #include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -18,57 +18,72 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::closeEvent(QCloseEvent *event)
+{
+    saveSettings();
+    saveWorkspaces();
+    QMainWindow::closeEvent(event);
+}
+
+void MainWindow::loadSettings()
+{
+    QSettings settings;
+    settings.beginGroup("settings");
+    if (settings.contains("geometry"))
+    {
+        QRect geometryRect = settings.value("geometry").value<QRect>();
+        setGeometry(geometryRect);
+    }
+    settings.endGroup();
+}
+
+void MainWindow::saveSettings()
+{
+    QSettings settings;
+    settings.beginGroup("settings");
+    settings.setValue("geometry", geometry());
+    settings.endGroup();
+}
+
+void MainWindow::loadWorkspaces()
+{
+    QSqliteDatabase db;
+    for (const QWorkspace &workspace : db.workspaces())
+    {
+        ui->tabWidget->insertWorkspace(workspace);
+    }
+}
+
+void MainWindow::saveWorkspaces()
+{
+    QSqliteDatabase db;
+    db.truncateWorkspaces();
+    for (const QWorkspace &workspace : ui->tabWidget->workspaces())
+    {
+        db.insertWorkspace(workspace);
+    }
+}
+
 void MainWindow::init()
 {
-    m_http = new QHttpClient(this);
-    connect(m_http, &QHttpClient::finished, this, &MainWindow::onFinished);
-}
-
-void MainWindow::onFinished(const QJsonDocument &response)
-{
-
-}
-
-bool MainWindow::setUrl()
-{
-    QString url = ui->txtUrl->text();
-    if (url.isEmpty())
+    loadSettings();
+    loadWorkspaces();
+    if (ui->tabWidget->count() == 0)
     {
-        return false;
+        ui->tabWidget->appendNewWorkspace();
     }
-    m_http->setUrl(url);
-    return true;
 }
 
-void MainWindow::setBody()
+void MainWindow::on_actionClose_triggered()
 {
-    QString body = ui->txtBody->toPlainText();
-    m_http->setBody(QJsonDocument::fromJson(body.toLatin1()));
+    if (QMessageBox::question(this, "Exit", "Are you sure to exit?") == QMessageBox::Yes)
+    {
+        close();
+    }
 }
 
-void MainWindow::on_btnSend_clicked()
+void MainWindow::on_actionNew_workspace_triggered()
 {
-    if (!setUrl())
-    {
-        QMessageBox::critical(this, "Error", "The url is empty");
-        return;
-    }
-    setBody();
-    HttpMethod method = ui->httpMethodCombo->currentMethod();
-    switch (method)
-    {
-        case Get:
-            m_http->get();
-            break;
-        case Post:
-            m_http->post();
-            break;
-        case Put:
-            m_http->put();
-            break;
-        case Delete:
-            m_http->deleteResource();
-            break;
-    }
+    ui->tabWidget->appendNewWorkspace();
 }
 

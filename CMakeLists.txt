@@ -11,8 +11,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Network)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Network)
+
+find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Sql)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Sql)
 
 set(PROJECT_SOURCES
         main.cpp
@@ -21,15 +25,32 @@ set(PROJECT_SOURCES
         mainwindow.ui
         services/qhttpclient.h services/qhttpclient.cpp
         interfaces/qhttpheader.h interfaces/qhttpheader.cpp
+        interfaces/qhighlightingrule.h
+        interfaces/qworkspace.h interfaces/qworkspace.cpp
         widgets/qhttpmethodcombo.h widgets/qhttpmethodcombo.cpp
         widgets/qhttpheadertable.h widgets/qhttpheadertable.cpp
+        persistence/qsqlitedatabase.cpp persistence/qsqlitedatabase.h
+        widgets/qworkspacewidget.h widgets/qworkspacewidget.cpp widgets/qworkspacewidget.ui
+        widgets/codeeditor/qcodetextedit.h widgets/codeeditor/qcodetextedit.cpp
+        widgets/codeeditor/qcodehighlighter.h widgets/codeeditor/qcodehighlighter.cpp
+        widgets/qworkspacetabwidget.h widgets/qworkspacetabwidget.cpp
         enums/enums.h
+        res.qrc
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
     qt_add_executable(QPostwoman
         MANUAL_FINALIZATION
         ${PROJECT_SOURCES}
+
+
+
+
+
+
+
+
+
 
 
 
@@ -55,6 +76,7 @@ endif()
 
 target_link_libraries(QPostwoman PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
 target_link_libraries(QPostwoman PRIVATE Qt${QT_VERSION_MAJOR}::Network)
+target_link_libraries(QPostwoman PRIVATE Qt${QT_VERSION_MAJOR}::Sql)
 
 target_include_directories(QPostwoman PRIVATE .)
 
